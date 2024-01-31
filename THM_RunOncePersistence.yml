@@ -1,0 +1,35 @@
+#RunOnce Persistence - Intel Analysis
+#IOC1 - Image: reg.exe
+#IOC2 - Command Line: reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v MicrosoftUpdate /t REG_SZ /d "C:\Windows\System32\cmdd.exe"
+
+#Rule Identification
+  title: RunOnce Persistence
+  id: 330eec74-5c5d-4cae-af30-4a1fa1e15f30
+  status: experimental
+  description: Detects creation of new registry entry and value which can be used as a persistence methods by malicious actors
+  author: Mirza Mansoor Ali Baig
+  date: 30/01/2024
+#Log Source
+  logsource:
+     category: sysmon
+     product: windows
+#Detection Description
+  detection:
+    selection:
+      EventID: 
+       - 1
+      Image|endswith:
+       - reg.exe
+      CommandLine|contains|all:
+      - reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v MicrosoftUpdate /t REG_SZ /d "C:\Windows\System32\cmdd.exe"
+    condition: selection  
+#Rule Metadata
+  falsepositives:
+      - Investigate the logs to determine what was executed during the boot up.
+  level: medium
+  references:
+    - https://attack.mitre.org/techniques/T1547/001/
+  tags:
+    - attack.persistence
+    - attack.privilege_escalation
+    - attack.t1547

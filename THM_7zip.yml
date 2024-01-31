@@ -1,0 +1,38 @@
+#7-zip Collection - Intel Analysis
+#IOC1 - Image: 7z.exe
+#IOC2 - CommandLine: 7z a exfil.zip * -p
+#The command line "7z a exfil.zip * -p" is used to create an archive file called "exfil.zip" from all files in the current directory and to encrypt the archive with a password.
+
+#Rule Identification
+title: 7-zip Collection
+status: experimental
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+description: Detects the collection of sensitive data via 7-zip command line
+#log source
+logsource:
+      category: data_collection
+#Detection Description
+detection:
+     selection:
+         Image|endswith:
+         - '\7z.exe'
+         Commandline|contains:
+         - '7Z a exfil.zip * -p'
+      condition: all of selection
+fields:
+   - EventID
+   - Image
+   - CommandLine
+#Rule Metadata
+falsepositives:
+   - Legit admin running 7-zip tool for testing purposes
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/techniques/T1560/001/
+tags:
+   - attack.collection
+   - attack.T1560.001
+
+    

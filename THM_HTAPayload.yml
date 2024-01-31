@@ -1,0 +1,38 @@
+#Malicious HTA Payload - Intel Analysis
+#IOC1 - Parent Image: chrome.exe
+#IOC 2 - Image: mshta.exe
+#IOC 3 - Command Line: C:\Windows\SysWOW64\mshta.exe C:\Users\victim\Downloads\update.hta
+
+#Rule Idenitfication
+title: HTA Payload
+status: experimental
+description: HTA Malicious Payload Detection
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+#Log Source
+log source:
+     product: windows
+     category: process_creation
+#Detection Description
+detection:
+    selection:
+       EventID: 1
+       ParentImage|endswith: 
+       - '\chrome.exe'
+       Image|endswith:
+       - '\mshta.exe'
+condition: selection
+#Rule Identification
+falsepositives:
+   - HTA Payload doesn't contain any vulnerable code
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/techniques/T1566/
+tags:
+   - attack.initial_access
+   - attack.T1566.001
+   - attack.T1566.002
+   - attack.T1566.003
+   - attack.T1566.004
+

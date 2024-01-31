@@ -1,0 +1,35 @@
+#Intel Analysis
+#Rule Identification
+title: Scheduled Task Process
+status: experimental
+description: Process creation event through a scheduled task
+author: Mirza Mansoor Ali Baig
+date: 29/01/2024
+#Log Source
+logsource:
+    category: process_creation
+    product: windows
+#Detection Description
+detection:
+  selection:
+    Image|endswith:
+         - 'schtasks.exe'
+    CommandLine|contains:
+         - 'schtasks /create'
+    filter:
+    User|contains:
+         - 'SYSTEM'
+  condition: selection and not filter
+#Rule Metadata
+falsepositives:
+    - Legitimate process being created
+level: high
+references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks-create
+    - https://attack.mitre.org/datasources/DS0009/#Process%20Creation
+    - https://www.elastic.co/guide/en/security/current/a-scheduled-task-was-created.html
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.privlege_execution
+    - attack.T1053.005

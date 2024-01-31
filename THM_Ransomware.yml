@@ -1,0 +1,34 @@
+#Ranswomware File Encryption - Intel Analysis
+#IOC1 - Image: ransom.exe
+#IOC2 - Target Filename: *.huntme
+
+#Rule Identification
+title: Ransomware File Encryption
+status: experimental
+author: Mirza Mansoor Ali Baig
+date: 29/01/2024
+description: Detects the file encryption event.
+#Log Source
+logsource:
+      category: file_event
+      product: windows
+#Detection Description:
+detection:
+      selection:
+         Image|endswith:
+         - '\ransom.exe'
+         EventID: 
+         - 4688
+         TargetFilename|contains:
+         - '.huntme'
+      condition: all of selection
+#Rule Metadata:
+falsepositives:
+    - Files that are not encrypted by Ransomware
+level: high
+references:
+    - https://attack.mitre.org/techniques/T1486/
+tags:
+    - attack.impact
+    - attack.T1486
+
