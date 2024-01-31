@@ -1,3 +1,4 @@
+#This Sigma rule guideline is from TryHackMe
 title: #Title of your rule
 id: #Universally Unique Identifier (UUID) Generate one from https://www.uuidgenerator.net
 status: #stage of your rule testing 
