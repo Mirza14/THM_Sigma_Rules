@@ -1,0 +1,28 @@
+#Rule Identification
+title: AnyDesk Installation
+status: experimental
+description: AnyDesk Remote Desktop tool installation can be used by attacker to gain remote access 
+author: Mirza Mansoor Ali Baig
+date: 24/11/2023
+# Log Source
+logsource:
+    category: process_creation
+    product: windows
+# Detection Description
+detection: 
+    selection:
+      CommandLine|contains|all: 
+            - '--install'
+            - '--start-with-win'
+      CurrentDirectory|contains:
+            - 'C:\ProgramData\AnyDesk.exe'
+    condition: selection
+#Rule Metadata
+falsepositives: 
+    - Legitimate deployment of AnyDesk by an administrator
+level: high
+references:
+    - https://twitter.com/TheDFIRReport/status/1423361127472377860?s=20&t=mHiJFnlfWH3cO3XdXEQo_Q
+tags:
+    - attack.command_and_control
+    - attack.t1219
